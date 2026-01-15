@@ -12,6 +12,6 @@ import java.util.List;
 @Repository
 public interface StoreRepository extends JpaRepository<Store, Long> {
     
-    @Query(value = "SELECT * FROM stores WHERE ST_DWithin(location::geography, :point::geography, :distanceInMeters)", nativeQuery = true)
+    @Query(value = "SELECT * FROM stores WHERE ST_DWithin(CAST(location AS geography), CAST(:point AS geography), :distanceInMeters)", nativeQuery = true)
     List<Store> findStoresWithinDistance(@Param("point") Point point, @Param("distanceInMeters") double distanceInMeters);
 }
