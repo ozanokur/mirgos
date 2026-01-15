@@ -16,24 +16,39 @@ import java.util.List;
 public class EntranceEventService {
     private final EntranceEventRepository entranceEventRepository;
     private final StoreRepository storeRepository;
+    private final ParameterService parameterService;
     
-    // Proximity threshold in meters (default 50 meters)
-    private static final double PROXIMITY_THRESHOLD_METERS = 50.0;
+    // Default values (used if parameter not found in DB)
+    private static final double DEFAULT_PROXIMITY_RADIUS_METERS = 50.0;
+    private static final int DEFAULT_ENTRANCE_EVENT_THRESHOLD_MINUTES = 1;
 
     @Transactional
     public void processCourierLocation(Long courierId, org.locationtech.jts.geom.Point location) {
+        // Get proximity radius from database parameter (cached)
+        double proximityRadius = parameterService.getParameterValueAsDouble(
+                ParameterService.PROXIMITY_RADIUS_METERS, 
+                DEFAULT_PROXIMITY_RADIUS_METERS
+        );
+        
         // Find stores within proximity
-        List<Store> nearbyStores = storeRepository.findStoresWithinDistance(location, PROXIMITY_THRESHOLD_METERS);
+        List<Store> nearbyStores = storeRepository.findStoresWithinDistance(location, proximityRadius);
         
         LocalDateTime now = LocalDateTime.now();
-        // Prevent duplicate events within 5 minutes
-        LocalDateTime fiveMinutesAgo = now.minusMinutes(5);
+        
+        // Get entrance event threshold from database parameter (cached)
+        int thresholdMinutes = parameterService.getParameterValueAsInteger(
+                ParameterService.ENTRANCE_EVENT_THRESHOLD_MINUTES,
+                DEFAULT_ENTRANCE_EVENT_THRESHOLD_MINUTES
+        );
+        
+        // Prevent duplicate events within threshold minutes
+        LocalDateTime thresholdTime = now.minusMinutes(thresholdMinutes);
         
         // Create entrance events for each nearby store (avoid duplicates)
         for (Store store : nearbyStores) {
             // Check if there's already a recent entrance event for this courier-store combination
             boolean alreadyExists = entranceEventRepository.findRecentEntranceEvent(
-                    courierId, store.getId(), fiveMinutesAgo
+                    courierId, store.getId(), thresholdTime
             ).isPresent();
             
             if (!alreadyExists) {
