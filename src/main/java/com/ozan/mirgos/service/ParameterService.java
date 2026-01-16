@@ -15,6 +15,7 @@ public class ParameterService {
     // Parameter keys
     public static final String ENTRANCE_THRESHOLD_MINUTES = "entrance_event_threshold_minutes";
     public static final String PROXIMITY_RADIUS_METERS = "proximity_radius_meters";
+    public static final String DISTANCE_STRATEGY = "distance_strategy";
 
     @Cacheable(value = "parameters", key = "#key")
     public String getParameterValue(String key, String defaultValue) {

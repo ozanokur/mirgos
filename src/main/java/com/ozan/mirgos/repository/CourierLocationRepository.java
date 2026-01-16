@@ -13,7 +13,7 @@ import com.ozan.mirgos.entity.CourierLocation;
 
 @Repository
 public interface CourierLocationRepository extends JpaRepository<CourierLocation, Long> {
-    @Query("SELECT cl FROM CourierLocation cl WHERE cl.courierId = :courierId AND cl.id != :currentId AND cl.time < :currentTime ORDER BY cl.time DESC")
+    @Query("SELECT cl FROM CourierLocation cl WHERE cl.courierId = :courierId AND cl.id != :currentId AND cl.time <= :currentTime ORDER BY cl.time DESC")
     List<CourierLocation> findPreviousLocationByCourierId(@Param("courierId") Long courierId, @Param("currentId") Long currentId, @Param("currentTime") LocalDateTime currentTime, Pageable pageable);
 
     @Query("SELECT cl FROM CourierLocation cl WHERE cl.courierId = :courierId AND cl.time >= :time ORDER BY cl.time ASC")
