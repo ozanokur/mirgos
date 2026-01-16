@@ -20,8 +20,7 @@ public class DistanceCalculationEventListener {
         log.debug("Processing distance calculation event for courier ID: {}", 
                 event.getCourierLocation().getCourierId());
         distanceCalculationService.calculateAndUpdateDistance(
-                event.getCourierLocation(),
-                event.getPreviousLocation()
+                event.getCourierLocation()
         );
     }
 }

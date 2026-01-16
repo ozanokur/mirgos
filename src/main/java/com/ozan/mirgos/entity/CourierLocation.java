@@ -23,7 +23,7 @@ public class CourierLocation {
     @Column(nullable = false)
     private Long courierId;
 
-    @Column(nullable = false, columnDefinition = "geometry(Point,4326)")
+    @Column(nullable = false, columnDefinition = "geography(Point,4326)")
     @Getter
     @Setter
     @JsonIgnore

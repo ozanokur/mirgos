@@ -13,7 +13,7 @@ public class ParameterService {
     private final ParameterRepository parameterRepository;
 
     // Parameter keys
-    public static final String ENTRANCE_EVENT_THRESHOLD_MINUTES = "entrance_event_threshold_minutes";
+    public static final String ENTRANCE_THRESHOLD_MINUTES = "entrance_event_threshold_minutes";
     public static final String PROXIMITY_RADIUS_METERS = "proximity_radius_meters";
 
     @Cacheable(value = "parameters", key = "#key")

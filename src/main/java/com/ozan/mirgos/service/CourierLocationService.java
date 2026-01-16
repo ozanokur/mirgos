@@ -1,7 +1,7 @@
 package com.ozan.mirgos.service;
 
 import com.ozan.mirgos.entity.CourierLocation;
-import com.ozan.mirgos.event.CourierLocationEnteredEvent;
+import com.ozan.mirgos.event.EntranceCalculationEvent;
 import com.ozan.mirgos.event.DistanceCalculationEvent;
 import com.ozan.mirgos.repository.CourierLocationRepository;
 import lombok.RequiredArgsConstructor;
@@ -25,31 +25,36 @@ public class CourierLocationService {
     private final GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
     @Transactional
-    public CourierLocation registerCourierLocation(Long courierId, double latitude, double longitude) {
+    public CourierLocation registerCourierLocation(Long courierId, double latitude, double longitude, LocalDateTime time) {
         Point location = geometryFactory.createPoint(new Coordinate(longitude, latitude));
         CourierLocation courierLocation = new CourierLocation();
         courierLocation.setCourierId(courierId);
         courierLocation.setLocation(location);
-        courierLocation.setTime(LocalDateTime.now());
+        courierLocation.setTime(time);
         
         CourierLocation saved = courierLocationRepository.save(courierLocation);
         
-        // Get previous location for distance calculation
-        CourierLocation previousLocation = getPreviousLocation(courierId, saved.getId());
-        
         // Publish event when courier location is entered
-        eventPublisher.publishEvent(new CourierLocationEnteredEvent(this, saved));
+        eventPublisher.publishEvent(new EntranceCalculationEvent(this, saved));
         
         // Publish distance calculation event (separate event for performance)
-        eventPublisher.publishEvent(new DistanceCalculationEvent(this, saved, previousLocation));
+        eventPublisher.publishEvent(new DistanceCalculationEvent(this, saved));
         
         return saved;
     }
 
-    private CourierLocation getPreviousLocation(Long courierId, Long currentLocationId) {
+    public CourierLocation getPreviousLocation(Long courierId, Long currentLocationId, LocalDateTime currentLocationTime) {
         List<CourierLocation> previousLocations = courierLocationRepository.findPreviousLocationByCourierId(
-                courierId, currentLocationId, PageRequest.of(0, 1)
+                courierId, currentLocationId, currentLocationTime, PageRequest.of(0, 1)
         );
         return previousLocations.isEmpty() ? null : previousLocations.get(0);
+    }
+
+    public List<CourierLocation> getCourierLocations(Long courierId, LocalDateTime time) {
+        return courierLocationRepository.findByCourierIdAndTime(courierId, time);
+    }
+
+    public List<CourierLocation> getCourierLocations() {
+        return courierLocationRepository.findAll();
     }
 }

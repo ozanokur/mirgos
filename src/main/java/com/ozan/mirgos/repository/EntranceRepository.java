@@ -1,6 +1,6 @@
 package com.ozan.mirgos.repository;
 
-import com.ozan.mirgos.entity.EntranceEvent;
+import com.ozan.mirgos.entity.Entrance;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -10,11 +10,11 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Repository
-public interface EntranceEventRepository extends JpaRepository<EntranceEvent, Long> {
+public interface EntranceRepository extends JpaRepository<Entrance, Long> {
     
-    @Query("SELECT e FROM EntranceEvent e WHERE e.courierId = :courierId AND e.storeId = :storeId " +
+    @Query("SELECT e FROM Entrance e WHERE e.courierId = :courierId AND e.storeId = :storeId " +
            "AND e.eventTime >= :since")
-    Optional<EntranceEvent> findRecentEntranceEvent(
+    Optional<Entrance> findRecentEntrance(
             @Param("courierId") Long courierId,
             @Param("storeId") Long storeId,
             @Param("since") LocalDateTime since

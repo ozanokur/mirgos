@@ -12,9 +12,14 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class DistanceCalculationService {
     private final CourierDistanceRepository courierDistanceRepository;
+    private final CourierLocationService courierLocationService;
 
     @Transactional
-    public void calculateAndUpdateDistance(CourierLocation currentLocation, CourierLocation previousLocation) {
+    public void calculateAndUpdateDistance(CourierLocation currentLocation) {
+        
+        // Get previous location for distance calculation
+        CourierLocation previousLocation = courierLocationService.getPreviousLocation(currentLocation.getCourierId(), currentLocation.getId(), currentLocation.getTime());
+
         if (previousLocation == null) {
             // First location for this courier, initialize distance to 0
             CourierDistance courierDistance = courierDistanceRepository.findByCourierId(currentLocation.getCourierId())

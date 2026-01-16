@@ -5,10 +5,10 @@ import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class CourierLocationEnteredEvent extends ApplicationEvent {
+public class EntranceCalculationEvent extends ApplicationEvent {
     private final CourierLocation courierLocation;
 
-    public CourierLocationEnteredEvent(Object source, CourierLocation courierLocation) {
+    public EntranceCalculationEvent(Object source, CourierLocation courierLocation) {
         super(source);
         this.courierLocation = courierLocation;
     }

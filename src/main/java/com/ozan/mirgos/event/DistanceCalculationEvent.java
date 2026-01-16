@@ -7,11 +7,9 @@ import org.springframework.context.ApplicationEvent;
 @Getter
 public class DistanceCalculationEvent extends ApplicationEvent {
     private final CourierLocation courierLocation;
-    private final CourierLocation previousLocation;
 
-    public DistanceCalculationEvent(Object source, CourierLocation courierLocation, CourierLocation previousLocation) {
+    public DistanceCalculationEvent(Object source, CourierLocation courierLocation) {
         super(source);
         this.courierLocation = courierLocation;
-        this.previousLocation = previousLocation;
     }
 }

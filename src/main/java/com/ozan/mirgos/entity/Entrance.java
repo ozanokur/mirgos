@@ -8,11 +8,11 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "entrance_events")
+@Table(name = "entrances")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class EntranceEvent {
+public class Entrance {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
