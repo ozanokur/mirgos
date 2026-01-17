@@ -122,10 +122,23 @@ A simple workflow graph for the required logic can be found on `workflow.png`
 
 
 
+
 ## Testing
 
-Currently no tests are implemented. 
   
+## Testing Strategy
+
+Basic unit tests exist for entrance, distance calculation and location ingestion because these are some of the most important core aspects of the project.
+
+ In a real production environment, this project would include:
+- Extensive unit tests with conditional and edge-case coverage
+- Integration tests backed by a real PostgreSQL + PostGIS instance since a large chunk of the processes rely on external integrations
+
+## Running Tests
+Tests can be run with the following command:
+```bash
+mvnw test
+```
   
 
 ## Assumptions
@@ -139,23 +152,6 @@ Currently no tests are implemented.
 
 4.  **No Security Measures**: API calls are not secured. A gateway application is assumed to exist.
 
-  
-
-## Scaling Considerations
-  
-
-#### 5. Performance Optimizations
-
--  **Batch Processing**: Process location events in batches
-
--  **Async Processing**: Use `@Async` for store proximity checks
-
--  **Connection Pooling**: For database/Redis connections
-
--  **Monitoring**: Add metrics (Micrometer) for ingestion rate, distance calculations
-
-  
-  
 
 ## Future Enhancements
 
