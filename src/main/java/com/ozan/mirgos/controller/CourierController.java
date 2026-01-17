@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ozan.mirgos.dto.CourierRequest;
 import com.ozan.mirgos.entity.Courier;
 import com.ozan.mirgos.entity.CourierLocation;
+import com.ozan.mirgos.entity.Entrance;
 import com.ozan.mirgos.service.CourierDistanceService;
 import com.ozan.mirgos.service.CourierLocationService;
 import com.ozan.mirgos.service.CourierService;
+import com.ozan.mirgos.service.EntranceService;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,6 +38,7 @@ public class CourierController {
     private final CourierService courierService;
     private final CourierLocationService courierLocationService;
     private final CourierDistanceService courierDistanceService;
+    private final EntranceService entranceService;
 
     @PostMapping
     public ResponseEntity<Courier> registerCourier(@RequestBody CourierRequest request) {
@@ -67,9 +70,9 @@ public class CourierController {
         description = "Instances when a courier enters the store radius"
     )
     @GetMapping("/{id}/entrances")
-    public ResponseEntity<List<CourierLocation>> getCourierEntrances(@PathVariable Long id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from) {
-        List<CourierLocation> locations = courierLocationService.getCourierLocations(id, from);
-        return ResponseEntity.ok(locations);
+    public ResponseEntity<List<Entrance>> getCourierEntrances(@PathVariable Long id, @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime from) {
+        List<Entrance> entrances = entranceService.getEntrances(id, from);
+        return ResponseEntity.ok(entrances);
     }
 
     @GetMapping

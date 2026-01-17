@@ -35,6 +35,7 @@ public class CourierLocationController {
     )
     @PostMapping
     public ResponseEntity<CourierLocation> registerCourierLocation(@RequestBody CourierLocationRequest request) {
+        // Should wee validate courier, or should alternatives be considered?
         if (request.getCourierId() == null || request.getLatitude() == null || request.getLongitude() == null) {
             return ResponseEntity.badRequest().build();
         }

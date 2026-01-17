@@ -22,7 +22,7 @@ public class Store {
     private String name;
 
     @Column(nullable = false, columnDefinition = "geography(Point,4326)")
-    @Getter(AccessLevel.NONE)
+    @Getter
     @Setter
     @JsonIgnore
     private Point location;

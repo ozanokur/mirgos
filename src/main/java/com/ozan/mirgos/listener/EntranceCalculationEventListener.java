@@ -22,7 +22,8 @@ public class EntranceCalculationEventListener {
         log.info("Processing courier location event for courier ID: {}", event.getCourierLocation().getCourierId());
         entranceService.processCourierLocation(
                 event.getCourierLocation().getCourierId(),
-                event.getCourierLocation().getLocation()
+                event.getCourierLocation().getLocation(),
+                event.getCourierLocation().getTime()
         );
     }
 }
